@@ -2,9 +2,9 @@
 
 This application was generated using JHipster 7.9.4, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v7.9.4](https://www.jhipster.tech/documentation-archive/v7.9.4).
 
-## This repository belongs to team x
+## This repository belongs to team 50
 
-- Alice W (alw783@student.bham.ac.uk)
+- Sharaf Eddine Boukhezer (seb206@student.bham.ac.uk)
 
 - (insert the list of team mates)
 
