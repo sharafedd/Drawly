@@ -9,6 +9,7 @@ This application was generated using JHipster 7.9.4, you can find documentation 
 - Metehan Aydin (mra263@student.bham.ac.uk)
 - Ben Bailey (bxb251@student.bham.ac.uk)
 - Molly Minter (mxm1463@student.bham.ac.uk)
+- Hassan Raza (hxr296@student.bham.ac.uk)
 - (insert the list of team mates)
 
 ## changes for Teamproject
