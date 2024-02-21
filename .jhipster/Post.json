@@ -1,0 +1,49 @@
+{
+  "applications": "*",
+  "changelogDate": "20240221124832",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "post",
+  "fields": [
+    {
+      "fieldName": "postID",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "linkedPrompt",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "linkedUser",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "postContent",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "image"
+    },
+    {
+      "fieldName": "avergaeStar",
+      "fieldType": "Float"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Post",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "prompt",
+      "otherEntityRelationshipName": "post",
+      "relationshipName": "prompt",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "user",
+      "relationshipName": "user",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "no"
+}

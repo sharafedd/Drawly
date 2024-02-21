@@ -1,8 +1,33 @@
-application {
-  config {
-    baseName $appName$
-    packageName $appPackage$
-    applicationType monolith
-    $END$
-  }
+entity Post {
+    postID Integer
+    linkedPrompt Integer
+    linkedUser Integer
+    postContent ImageBlob
+    avergaeStar Float
+}
+
+entity Prompt {
+    promptID Integer
+    promptContent String
+    promptDeadline ZonedDateTime
+    participantsNum Integer
+}
+
+entity Competition {
+    compType Boolean
+    totalParticipants Integer
+}
+
+
+
+relationship ManyToOne {
+    Post{user} to User
+}
+
+relationship OneToMany {
+    Post{prompt} to Prompt
+}
+
+relationship OneToOne {
+    Competition{prompt} to Prompt
 }

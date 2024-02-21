@@ -1,0 +1,50 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="prompt">
+      <h2 data-cy="promptDetailsHeading"><span>Prompt</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ prompt.id }}</span>
+        </dd>
+        <dt><span>Prompt ID</span></dt>
+        <dd>
+          <span>{{ prompt.promptID }}</span>
+        </dd>
+        <dt><span>Prompt Content</span></dt>
+        <dd>
+          <span>{{ prompt.promptContent }}</span>
+        </dd>
+        <dt><span>Prompt Deadline</span></dt>
+        <dd>
+          <span>{{ prompt.promptDeadline | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span>Participants Num</span></dt>
+        <dd>
+          <span>{{ prompt.participantsNum }}</span>
+        </dd>
+        <dt><span>Post</span></dt>
+        <dd>
+          <div *ngIf="prompt.post">
+            <a [routerLink]="['/post', prompt.post.id, 'view']">{{ prompt.post.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/prompt', prompt.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

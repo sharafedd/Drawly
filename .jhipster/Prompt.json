@@ -1,0 +1,39 @@
+{
+  "applications": "*",
+  "changelogDate": "20240221124833",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "prompt",
+  "fields": [
+    {
+      "fieldName": "promptID",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "promptContent",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "promptDeadline",
+      "fieldType": "ZonedDateTime"
+    },
+    {
+      "fieldName": "participantsNum",
+      "fieldType": "Integer"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Prompt",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "post",
+      "otherEntityRelationshipName": "prompt",
+      "relationshipName": "post",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "no"
+}

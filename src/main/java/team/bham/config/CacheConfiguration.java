@@ -48,6 +48,10 @@ public class CacheConfiguration {
             createCache(cm, team.bham.domain.User.class.getName());
             createCache(cm, team.bham.domain.Authority.class.getName());
             createCache(cm, team.bham.domain.User.class.getName() + ".authorities");
+            createCache(cm, team.bham.domain.Post.class.getName());
+            createCache(cm, team.bham.domain.Post.class.getName() + ".prompts");
+            createCache(cm, team.bham.domain.Prompt.class.getName());
+            createCache(cm, team.bham.domain.Competition.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

@@ -1,0 +1,31 @@
+{
+  "applications": "*",
+  "changelogDate": "20240221124834",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "competition",
+  "fields": [
+    {
+      "fieldName": "compType",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "totalParticipants",
+      "fieldType": "Integer"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Competition",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "prompt",
+      "ownerSide": true,
+      "relationshipName": "prompt",
+      "relationshipType": "one-to-one"
+    }
+  ],
+  "service": "no"
+}

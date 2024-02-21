@@ -1,0 +1,110 @@
+<div>
+  <h2 id="page-heading" data-cy="PromptHeading">
+    <span>Prompts</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span>Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-prompt"
+        [routerLink]="['/prompt/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span> Create a new Prompt </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="prompts?.length === 0">
+    <span>No Prompts found</span>
+  </div>
+
+  <div class="table-responsive table-entities" id="entities" *ngIf="prompts && prompts.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+          <th scope="col" jhiSortBy="id">
+            <div class="d-flex">
+              <span>ID</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="promptID">
+            <div class="d-flex">
+              <span>Prompt ID</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="promptContent">
+            <div class="d-flex">
+              <span>Prompt Content</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="promptDeadline">
+            <div class="d-flex">
+              <span>Prompt Deadline</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="participantsNum">
+            <div class="d-flex">
+              <span>Participants Num</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="post.id">
+            <div class="d-flex">
+              <span>Post</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let prompt of prompts; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/prompt', prompt.id, 'view']">{{ prompt.id }}</a>
+          </td>
+          <td>{{ prompt.promptID }}</td>
+          <td>{{ prompt.promptContent }}</td>
+          <td>{{ prompt.promptDeadline | formatMediumDatetime }}</td>
+          <td>{{ prompt.participantsNum }}</td>
+          <td>
+            <div *ngIf="prompt.post">
+              <a [routerLink]="['/post', prompt.post.id, 'view']">{{ prompt.post.id }}</a>
+            </div>
+          </td>
+          <td class="text-end">
+            <div class="btn-group">
+              <button type="submit" [routerLink]="['/prompt', prompt.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline">View</span>
+              </button>
+
+              <button type="submit" [routerLink]="['/prompt', prompt.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(prompt)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
