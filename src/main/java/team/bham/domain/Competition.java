@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import team.bham.domain.enumeration.CompetitionType;
 
 /**
  * A Competition.
@@ -23,16 +24,20 @@ public class Competition implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "comp_type")
-    private Boolean compType;
+    @Column(name = "linked_prompt")
+    private Long linkedPrompt;
 
-    @Column(name = "total_participants")
-    private Integer totalParticipants;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "competition_type")
+    private CompetitionType competitionType;
 
-    @JsonIgnoreProperties(value = { "post" }, allowSetters = true)
+    @Column(name = "no_of_participants")
+    private Long noOfParticipants;
+
+    @JsonIgnoreProperties(value = { "competition", "post" }, allowSetters = true)
     @OneToOne
     @JoinColumn(unique = true)
-    private Prompt prompt;
+    private CompetitionPrompt competitionPrompt;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -49,42 +54,55 @@ public class Competition implements Serializable {
         this.id = id;
     }
 
-    public Boolean getCompType() {
-        return this.compType;
+    public Long getLinkedPrompt() {
+        return this.linkedPrompt;
     }
 
-    public Competition compType(Boolean compType) {
-        this.setCompType(compType);
+    public Competition linkedPrompt(Long linkedPrompt) {
+        this.setLinkedPrompt(linkedPrompt);
         return this;
     }
 
-    public void setCompType(Boolean compType) {
-        this.compType = compType;
+    public void setLinkedPrompt(Long linkedPrompt) {
+        this.linkedPrompt = linkedPrompt;
     }
 
-    public Integer getTotalParticipants() {
-        return this.totalParticipants;
+    public CompetitionType getCompetitionType() {
+        return this.competitionType;
     }
 
-    public Competition totalParticipants(Integer totalParticipants) {
-        this.setTotalParticipants(totalParticipants);
+    public Competition competitionType(CompetitionType competitionType) {
+        this.setCompetitionType(competitionType);
         return this;
     }
 
-    public void setTotalParticipants(Integer totalParticipants) {
-        this.totalParticipants = totalParticipants;
+    public void setCompetitionType(CompetitionType competitionType) {
+        this.competitionType = competitionType;
     }
 
-    public Prompt getPrompt() {
-        return this.prompt;
+    public Long getNoOfParticipants() {
+        return this.noOfParticipants;
     }
 
-    public void setPrompt(Prompt prompt) {
-        this.prompt = prompt;
+    public Competition noOfParticipants(Long noOfParticipants) {
+        this.setNoOfParticipants(noOfParticipants);
+        return this;
     }
 
-    public Competition prompt(Prompt prompt) {
-        this.setPrompt(prompt);
+    public void setNoOfParticipants(Long noOfParticipants) {
+        this.noOfParticipants = noOfParticipants;
+    }
+
+    public CompetitionPrompt getCompetitionPrompt() {
+        return this.competitionPrompt;
+    }
+
+    public void setCompetitionPrompt(CompetitionPrompt competitionPrompt) {
+        this.competitionPrompt = competitionPrompt;
+    }
+
+    public Competition competitionPrompt(CompetitionPrompt competitionPrompt) {
+        this.setCompetitionPrompt(competitionPrompt);
         return this;
     }
 
@@ -112,8 +130,9 @@ public class Competition implements Serializable {
     public String toString() {
         return "Competition{" +
             "id=" + getId() +
-            ", compType='" + getCompType() + "'" +
-            ", totalParticipants=" + getTotalParticipants() +
+            ", linkedPrompt=" + getLinkedPrompt() +
+            ", competitionType='" + getCompetitionType() + "'" +
+            ", noOfParticipants=" + getNoOfParticipants() +
             "}";
     }
 }

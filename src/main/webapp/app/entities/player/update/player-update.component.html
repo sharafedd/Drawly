@@ -1,0 +1,116 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-player-heading" data-cy="PlayerCreateUpdateHeading">Create or edit a Player</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_linkedUser">Linked User</label>
+          <input
+            type="number"
+            class="form-control"
+            name="linkedUser"
+            id="field_linkedUser"
+            data-cy="linkedUser"
+            formControlName="linkedUser"
+          />
+          <div *ngIf="editForm.get('linkedUser')!.invalid && (editForm.get('linkedUser')!.dirty || editForm.get('linkedUser')!.touched)">
+            <small class="form-text text-danger" [hidden]="!editForm.get('linkedUser')?.errors?.number">
+              This field should be a number.
+            </small>
+          </div>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_linkedRoom">Linked Room</label>
+          <input
+            type="number"
+            class="form-control"
+            name="linkedRoom"
+            id="field_linkedRoom"
+            data-cy="linkedRoom"
+            formControlName="linkedRoom"
+          />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_username">Username</label>
+          <input type="text" class="form-control" name="username" id="field_username" data-cy="username" formControlName="username" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_drawing">Drawing</label>
+          <div>
+            <img
+              [src]="'data:' + editForm.get('drawingContentType')!.value + ';base64,' + editForm.get('drawing')!.value"
+              style="max-height: 100px"
+              *ngIf="editForm.get('drawing')!.value"
+              alt="player image"
+            />
+            <div *ngIf="editForm.get('drawing')!.value" class="form-text text-danger clearfix">
+              <span class="pull-start"
+                >{{ editForm.get('drawingContentType')!.value }}, {{ byteSize(editForm.get('drawing')!.value!) }}</span
+              >
+              <button
+                type="button"
+                (click)="clearInputImage('drawing', 'drawingContentType', 'file_drawing')"
+                class="btn btn-secondary btn-xs pull-end"
+              >
+                <fa-icon icon="times"></fa-icon>
+              </button>
+            </div>
+            <input type="file" id="file_drawing" data-cy="drawing" (change)="setFileData($event, 'drawing', true)" accept="image/*" />
+          </div>
+          <input type="hidden" class="form-control" name="drawing" id="field_drawing" data-cy="drawing" formControlName="drawing" />
+          <input
+            type="hidden"
+            class="form-control"
+            name="drawingContentType"
+            id="field_drawingContentType"
+            formControlName="drawingContentType"
+          />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_totalStars">Total Stars</label>
+          <input
+            type="number"
+            class="form-control"
+            name="totalStars"
+            id="field_totalStars"
+            data-cy="totalStars"
+            formControlName="totalStars"
+          />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_rank">Rank</label>
+          <input type="number" class="form-control" name="rank" id="field_rank" data-cy="rank" formControlName="rank" />
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

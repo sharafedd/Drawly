@@ -14,13 +14,14 @@ type PartialWithRequiredKeyOf<T extends { id: unknown }> = Partial<Omit<T, 'id'>
  */
 type CompetitionFormGroupInput = ICompetition | PartialWithRequiredKeyOf<NewCompetition>;
 
-type CompetitionFormDefaults = Pick<NewCompetition, 'id' | 'compType'>;
+type CompetitionFormDefaults = Pick<NewCompetition, 'id'>;
 
 type CompetitionFormGroupContent = {
   id: FormControl<ICompetition['id'] | NewCompetition['id']>;
-  compType: FormControl<ICompetition['compType']>;
-  totalParticipants: FormControl<ICompetition['totalParticipants']>;
-  prompt: FormControl<ICompetition['prompt']>;
+  linkedPrompt: FormControl<ICompetition['linkedPrompt']>;
+  competitionType: FormControl<ICompetition['competitionType']>;
+  noOfParticipants: FormControl<ICompetition['noOfParticipants']>;
+  competitionPrompt: FormControl<ICompetition['competitionPrompt']>;
 };
 
 export type CompetitionFormGroup = FormGroup<CompetitionFormGroupContent>;
@@ -40,9 +41,10 @@ export class CompetitionFormService {
           validators: [Validators.required],
         }
       ),
-      compType: new FormControl(competitionRawValue.compType),
-      totalParticipants: new FormControl(competitionRawValue.totalParticipants),
-      prompt: new FormControl(competitionRawValue.prompt),
+      linkedPrompt: new FormControl(competitionRawValue.linkedPrompt),
+      competitionType: new FormControl(competitionRawValue.competitionType),
+      noOfParticipants: new FormControl(competitionRawValue.noOfParticipants),
+      competitionPrompt: new FormControl(competitionRawValue.competitionPrompt),
     });
   }
 
@@ -63,7 +65,6 @@ export class CompetitionFormService {
   private getFormDefaults(): CompetitionFormDefaults {
     return {
       id: null,
-      compType: false,
     };
   }
 }

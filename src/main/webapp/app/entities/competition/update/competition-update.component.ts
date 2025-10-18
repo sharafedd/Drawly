@@ -7,8 +7,9 @@ import { finalize, map } from 'rxjs/operators';
 import { CompetitionFormService, CompetitionFormGroup } from './competition-form.service';
 import { ICompetition } from '../competition.model';
 import { CompetitionService } from '../service/competition.service';
-import { IPrompt } from 'app/entities/prompt/prompt.model';
-import { PromptService } from 'app/entities/prompt/service/prompt.service';
+import { ICompetitionPrompt } from 'app/entities/competition-prompt/competition-prompt.model';
+import { CompetitionPromptService } from 'app/entities/competition-prompt/service/competition-prompt.service';
+import { CompetitionType } from 'app/entities/enumerations/competition-type.model';
 
 @Component({
   selector: 'jhi-competition-update',
@@ -17,19 +18,21 @@ import { PromptService } from 'app/entities/prompt/service/prompt.service';
 export class CompetitionUpdateComponent implements OnInit {
   isSaving = false;
   competition: ICompetition | null = null;
+  competitionTypeValues = Object.keys(CompetitionType);
 
-  promptsSharedCollection: IPrompt[] = [];
+  competitionPromptsCollection: ICompetitionPrompt[] = [];
 
   editForm: CompetitionFormGroup = this.competitionFormService.createCompetitionFormGroup();
 
   constructor(
     protected competitionService: CompetitionService,
     protected competitionFormService: CompetitionFormService,
-    protected promptService: PromptService,
+    protected competitionPromptService: CompetitionPromptService,
     protected activatedRoute: ActivatedRoute
   ) {}
 
-  comparePrompt = (o1: IPrompt | null, o2: IPrompt | null): boolean => this.promptService.comparePrompt(o1, o2);
+  compareCompetitionPrompt = (o1: ICompetitionPrompt | null, o2: ICompetitionPrompt | null): boolean =>
+    this.competitionPromptService.compareCompetitionPrompt(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ competition }) => {
@@ -79,17 +82,24 @@ export class CompetitionUpdateComponent implements OnInit {
     this.competition = competition;
     this.competitionFormService.resetForm(this.editForm, competition);
 
-    this.promptsSharedCollection = this.promptService.addPromptToCollectionIfMissing<IPrompt>(
-      this.promptsSharedCollection,
-      competition.prompt
+    this.competitionPromptsCollection = this.competitionPromptService.addCompetitionPromptToCollectionIfMissing<ICompetitionPrompt>(
+      this.competitionPromptsCollection,
+      competition.competitionPrompt
     );
   }
 
   protected loadRelationshipsOptions(): void {
-    this.promptService
-      .query()
-      .pipe(map((res: HttpResponse<IPrompt[]>) => res.body ?? []))
-      .pipe(map((prompts: IPrompt[]) => this.promptService.addPromptToCollectionIfMissing<IPrompt>(prompts, this.competition?.prompt)))
-      .subscribe((prompts: IPrompt[]) => (this.promptsSharedCollection = prompts));
+    this.competitionPromptService
+      .query({ filter: 'competition-is-null' })
+      .pipe(map((res: HttpResponse<ICompetitionPrompt[]>) => res.body ?? []))
+      .pipe(
+        map((competitionPrompts: ICompetitionPrompt[]) =>
+          this.competitionPromptService.addCompetitionPromptToCollectionIfMissing<ICompetitionPrompt>(
+            competitionPrompts,
+            this.competition?.competitionPrompt
+          )
+        )
+      )
+      .subscribe((competitionPrompts: ICompetitionPrompt[]) => (this.competitionPromptsCollection = competitionPrompts));
   }
 }

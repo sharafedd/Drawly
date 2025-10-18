@@ -1,0 +1,114 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-room-heading" data-cy="RoomCreateUpdateHeading">Create or edit a Room</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="row mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_noOfRounds">No Of Rounds</label>
+          <input
+            type="number"
+            class="form-control"
+            name="noOfRounds"
+            id="field_noOfRounds"
+            data-cy="noOfRounds"
+            formControlName="noOfRounds"
+          />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_noOfPlayers">No Of Players</label>
+          <input
+            type="number"
+            class="form-control"
+            name="noOfPlayers"
+            id="field_noOfPlayers"
+            data-cy="noOfPlayers"
+            formControlName="noOfPlayers"
+          />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_roomType">Room Type</label>
+          <select class="form-control" name="roomType" formControlName="roomType" id="field_roomType" data-cy="roomType">
+            <option [ngValue]="null"></option>
+            <option *ngFor="let roomType of roomTypeValues" [value]="roomType">roomType</option>
+          </select>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_roomCode">Room Code</label>
+          <input type="number" class="form-control" name="roomCode" id="field_roomCode" data-cy="roomCode" formControlName="roomCode" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_theme">Theme</label>
+          <input type="text" class="form-control" name="theme" id="field_theme" data-cy="theme" formControlName="theme" />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_player">Player</label>
+          <select
+            class="form-control"
+            id="field_player"
+            data-cy="player"
+            name="player"
+            formControlName="player"
+            [compareWith]="comparePlayer"
+          >
+            <option [ngValue]="null"></option>
+            <option [ngValue]="playerOption" *ngFor="let playerOption of playersSharedCollection">{{ playerOption.id }}</option>
+          </select>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_round">Round</label>
+          <select class="form-control" id="field_round" data-cy="round" name="round" formControlName="round" [compareWith]="compareRound">
+            <option [ngValue]="null"></option>
+            <option [ngValue]="roundOption" *ngFor="let roundOption of roundsSharedCollection">{{ roundOption.id }}</option>
+          </select>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_roundPrompt">Round Prompt</label>
+          <select
+            class="form-control"
+            id="field_roundPrompt"
+            data-cy="roundPrompt"
+            name="roundPrompt"
+            formControlName="roundPrompt"
+            [compareWith]="compareRoundPrompt"
+          >
+            <option [ngValue]="null"></option>
+            <option [ngValue]="roundPromptOption" *ngFor="let roundPromptOption of roundPromptsSharedCollection">
+              {{ roundPromptOption.id }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

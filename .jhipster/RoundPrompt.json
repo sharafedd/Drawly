@@ -1,0 +1,42 @@
+{
+  "applications": "*",
+  "changelogDate": "20240305074444",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "round_prompt",
+  "fields": [
+    {
+      "fieldName": "linkedRoom",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "linkedRound",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "content",
+      "fieldType": "String"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "RoundPrompt",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "room",
+      "otherEntityRelationshipName": "roundPrompt",
+      "relationshipName": "room",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "round",
+      "otherEntityRelationshipName": "roundPrompt",
+      "ownerSide": false,
+      "relationshipName": "round",
+      "relationshipType": "one-to-one"
+    }
+  ],
+  "service": "no"
+}

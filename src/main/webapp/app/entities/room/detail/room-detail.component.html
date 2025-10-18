@@ -1,0 +1,66 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="room">
+      <h2 data-cy="roomDetailsHeading"><span>Room</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ room.id }}</span>
+        </dd>
+        <dt><span>No Of Rounds</span></dt>
+        <dd>
+          <span>{{ room.noOfRounds }}</span>
+        </dd>
+        <dt><span>No Of Players</span></dt>
+        <dd>
+          <span>{{ room.noOfPlayers }}</span>
+        </dd>
+        <dt><span>Room Type</span></dt>
+        <dd>
+          <span>{{ room.roomType }}</span>
+        </dd>
+        <dt><span>Room Code</span></dt>
+        <dd>
+          <span>{{ room.roomCode }}</span>
+        </dd>
+        <dt><span>Theme</span></dt>
+        <dd>
+          <span>{{ room.theme }}</span>
+        </dd>
+        <dt><span>Player</span></dt>
+        <dd>
+          <div *ngIf="room.player">
+            <a [routerLink]="['/player', room.player.id, 'view']">{{ room.player.id }}</a>
+          </div>
+        </dd>
+        <dt><span>Round</span></dt>
+        <dd>
+          <div *ngIf="room.round">
+            <a [routerLink]="['/round', room.round.id, 'view']">{{ room.round.id }}</a>
+          </div>
+        </dd>
+        <dt><span>Round Prompt</span></dt>
+        <dd>
+          <div *ngIf="room.roundPrompt">
+            <a [routerLink]="['/round-prompt', room.roundPrompt.id, 'view']">{{ room.roundPrompt.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/room', room.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

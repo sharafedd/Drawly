@@ -4,10 +4,11 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { IPost } from '../post.model';
 import { sampleWithRequiredData, sampleWithNewData, sampleWithPartialData, sampleWithFullData } from '../post.test-samples';
 
-import { PostService } from './post.service';
+import { PostService, RestPost } from './post.service';
 
-const requireRestSample: IPost = {
+const requireRestSample: RestPost = {
   ...sampleWithRequiredData,
+  submissionDate: sampleWithRequiredData.submissionDate?.toJSON(),
 };
 
 describe('Post Service', () => {

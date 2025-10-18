@@ -52,6 +52,17 @@ public class CacheConfiguration {
             createCache(cm, team.bham.domain.Post.class.getName() + ".prompts");
             createCache(cm, team.bham.domain.Prompt.class.getName());
             createCache(cm, team.bham.domain.Competition.class.getName());
+            createCache(cm, team.bham.domain.Post.class.getName() + ".competitionPrompts");
+            createCache(cm, team.bham.domain.CompetitionPrompt.class.getName());
+            createCache(cm, team.bham.domain.Comment.class.getName());
+            createCache(cm, team.bham.domain.Comment.class.getName() + ".posts");
+            createCache(cm, team.bham.domain.Room.class.getName());
+            createCache(cm, team.bham.domain.Round.class.getName());
+            createCache(cm, team.bham.domain.Round.class.getName() + ".rooms");
+            createCache(cm, team.bham.domain.RoundPrompt.class.getName());
+            createCache(cm, team.bham.domain.RoundPrompt.class.getName() + ".rooms");
+            createCache(cm, team.bham.domain.Player.class.getName());
+            createCache(cm, team.bham.domain.Player.class.getName() + ".rooms");
             // jhipster-needle-ehcache-add-entry
         };
     }

@@ -1,3 +1,5 @@
+import { CompetitionType } from 'app/entities/enumerations/competition-type.model';
+
 import { ICompetition, NewCompetition } from './competition.model';
 
 export const sampleWithRequiredData: ICompetition = {
@@ -5,14 +7,15 @@ export const sampleWithRequiredData: ICompetition = {
 };
 
 export const sampleWithPartialData: ICompetition = {
-  id: 43677,
-  totalParticipants: 35858,
+  id: 35858,
+  competitionType: CompetitionType['Weekly'],
 };
 
 export const sampleWithFullData: ICompetition = {
-  id: 57377,
-  compType: true,
-  totalParticipants: 437,
+  id: 96433,
+  linkedPrompt: 437,
+  competitionType: CompetitionType['Daily'],
+  noOfParticipants: 87206,
 };
 
 export const sampleWithNewData: NewCompetition = {

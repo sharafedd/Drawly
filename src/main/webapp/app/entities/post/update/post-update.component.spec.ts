@@ -9,9 +9,8 @@ import { of, Subject, from } from 'rxjs';
 import { PostFormService } from './post-form.service';
 import { PostService } from '../service/post.service';
 import { IPost } from '../post.model';
-
-import { IUser } from 'app/entities/user/user.model';
-import { UserService } from 'app/entities/user/user.service';
+import { IComment } from 'app/entities/comment/comment.model';
+import { CommentService } from 'app/entities/comment/service/comment.service';
 
 import { PostUpdateComponent } from './post-update.component';
 
@@ -21,7 +20,7 @@ describe('Post Management Update Component', () => {
   let activatedRoute: ActivatedRoute;
   let postFormService: PostFormService;
   let postService: PostService;
-  let userService: UserService;
+  let commentService: CommentService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -44,43 +43,43 @@ describe('Post Management Update Component', () => {
     activatedRoute = TestBed.inject(ActivatedRoute);
     postFormService = TestBed.inject(PostFormService);
     postService = TestBed.inject(PostService);
-    userService = TestBed.inject(UserService);
+    commentService = TestBed.inject(CommentService);
 
     comp = fixture.componentInstance;
   });
 
   describe('ngOnInit', () => {
-    it('Should call User query and add missing value', () => {
+    it('Should call Comment query and add missing value', () => {
       const post: IPost = { id: 456 };
-      const user: IUser = { id: 83665 };
-      post.user = user;
+      const comment: IComment = { id: 80799 };
+      post.comment = comment;
 
-      const userCollection: IUser[] = [{ id: 79363 }];
-      jest.spyOn(userService, 'query').mockReturnValue(of(new HttpResponse({ body: userCollection })));
-      const additionalUsers = [user];
-      const expectedCollection: IUser[] = [...additionalUsers, ...userCollection];
-      jest.spyOn(userService, 'addUserToCollectionIfMissing').mockReturnValue(expectedCollection);
+      const commentCollection: IComment[] = [{ id: 71349 }];
+      jest.spyOn(commentService, 'query').mockReturnValue(of(new HttpResponse({ body: commentCollection })));
+      const additionalComments = [comment];
+      const expectedCollection: IComment[] = [...additionalComments, ...commentCollection];
+      jest.spyOn(commentService, 'addCommentToCollectionIfMissing').mockReturnValue(expectedCollection);
 
       activatedRoute.data = of({ post });
       comp.ngOnInit();
 
-      expect(userService.query).toHaveBeenCalled();
-      expect(userService.addUserToCollectionIfMissing).toHaveBeenCalledWith(
-        userCollection,
-        ...additionalUsers.map(expect.objectContaining)
+      expect(commentService.query).toHaveBeenCalled();
+      expect(commentService.addCommentToCollectionIfMissing).toHaveBeenCalledWith(
+        commentCollection,
+        ...additionalComments.map(expect.objectContaining)
       );
-      expect(comp.usersSharedCollection).toEqual(expectedCollection);
+      expect(comp.commentsSharedCollection).toEqual(expectedCollection);
     });
 
     it('Should update editForm', () => {
       const post: IPost = { id: 456 };
-      const user: IUser = { id: 98794 };
-      post.user = user;
+      const comment: IComment = { id: 87935 };
+      post.comment = comment;
 
       activatedRoute.data = of({ post });
       comp.ngOnInit();
 
-      expect(comp.usersSharedCollection).toContain(user);
+      expect(comp.commentsSharedCollection).toContain(comment);
       expect(comp.post).toEqual(post);
     });
   });
@@ -154,13 +153,13 @@ describe('Post Management Update Component', () => {
   });
 
   describe('Compare relationships', () => {
-    describe('compareUser', () => {
-      it('Should forward to userService', () => {
+    describe('compareComment', () => {
+      it('Should forward to commentService', () => {
         const entity = { id: 123 };
         const entity2 = { id: 456 };
-        jest.spyOn(userService, 'compareUser');
-        comp.compareUser(entity, entity2);
-        expect(userService.compareUser).toHaveBeenCalledWith(entity, entity2);
+        jest.spyOn(commentService, 'compareComment');
+        comp.compareComment(entity, entity2);
+        expect(commentService.compareComment).toHaveBeenCalledWith(entity, entity2);
       });
     });
   });

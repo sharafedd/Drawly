@@ -14,10 +14,6 @@
         <dd>
           <span>{{ post.id }}</span>
         </dd>
-        <dt><span>Post ID</span></dt>
-        <dd>
-          <span>{{ post.postID }}</span>
-        </dd>
         <dt><span>Linked Prompt</span></dt>
         <dd>
           <span>{{ post.linkedPrompt }}</span>
@@ -35,13 +31,19 @@
             {{ post.postContentContentType }}, {{ byteSize(post.postContent) }}
           </div>
         </dd>
-        <dt><span>Avergae Star</span></dt>
+        <dt><span>Average Star</span></dt>
         <dd>
-          <span>{{ post.avergaeStar }}</span>
+          <span>{{ post.averageStar }}</span>
         </dd>
-        <dt><span>User</span></dt>
+        <dt><span>Submission Date</span></dt>
         <dd>
-          <span>{{ post.user?.id }}</span>
+          <span>{{ post.submissionDate | formatMediumDatetime }}</span>
+        </dd>
+        <dt><span>Comment</span></dt>
+        <dd>
+          <div *ngIf="post.comment">
+            <a [routerLink]="['/comment', post.comment.id, 'view']">{{ post.comment.id }}</a>
+          </div>
         </dd>
       </dl>
 

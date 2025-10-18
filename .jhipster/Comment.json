@@ -1,0 +1,39 @@
+{
+  "applications": "*",
+  "changelogDate": "20240305074441",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "comment",
+  "fields": [
+    {
+      "fieldName": "linkedPost",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "linkedUser",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "content",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "timestamp",
+      "fieldType": "Instant"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Comment",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "post",
+      "otherEntityRelationshipName": "comment",
+      "relationshipName": "post",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "service": "no"
+}

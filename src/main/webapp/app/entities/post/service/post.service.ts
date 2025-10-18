@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import dayjs from 'dayjs/esm';
 
 import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
@@ -8,6 +10,16 @@ import { createRequestOption } from 'app/core/request/request-util';
 import { IPost, NewPost } from '../post.model';
 
 export type PartialUpdatePost = Partial<IPost> & Pick<IPost, 'id'>;
+
+type RestOf<T extends IPost | NewPost> = Omit<T, 'submissionDate'> & {
+  submissionDate?: string | null;
+};
+
+export type RestPost = RestOf<IPost>;
+
+export type NewRestPost = RestOf<NewPost>;
+
+export type PartialUpdateRestPost = RestOf<PartialUpdatePost>;
 
 export type EntityResponseType = HttpResponse<IPost>;
 export type EntityArrayResponseType = HttpResponse<IPost[]>;
@@ -19,24 +31,35 @@ export class PostService {
   constructor(protected http: HttpClient, protected applicationConfigService: ApplicationConfigService) {}
 
   create(post: NewPost): Observable<EntityResponseType> {
-    return this.http.post<IPost>(this.resourceUrl, post, { observe: 'response' });
+    const copy = this.convertDateFromClient(post);
+    return this.http.post<RestPost>(this.resourceUrl, copy, { observe: 'response' }).pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   update(post: IPost): Observable<EntityResponseType> {
-    return this.http.put<IPost>(`${this.resourceUrl}/${this.getPostIdentifier(post)}`, post, { observe: 'response' });
+    const copy = this.convertDateFromClient(post);
+    return this.http
+      .put<RestPost>(`${this.resourceUrl}/${this.getPostIdentifier(post)}`, copy, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   partialUpdate(post: PartialUpdatePost): Observable<EntityResponseType> {
-    return this.http.patch<IPost>(`${this.resourceUrl}/${this.getPostIdentifier(post)}`, post, { observe: 'response' });
+    const copy = this.convertDateFromClient(post);
+    return this.http
+      .patch<RestPost>(`${this.resourceUrl}/${this.getPostIdentifier(post)}`, copy, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   find(id: number): Observable<EntityResponseType> {
-    return this.http.get<IPost>(`${this.resourceUrl}/${id}`, { observe: 'response' });
+    return this.http
+      .get<RestPost>(`${this.resourceUrl}/${id}`, { observe: 'response' })
+      .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
-    return this.http.get<IPost[]>(this.resourceUrl, { params: options, observe: 'response' });
+    return this.http
+      .get<RestPost[]>(this.resourceUrl, { params: options, observe: 'response' })
+      .pipe(map(res => this.convertResponseArrayFromServer(res)));
   }
 
   delete(id: number): Observable<HttpResponse<{}>> {
@@ -69,5 +92,31 @@ export class PostService {
       return [...postsToAdd, ...postCollection];
     }
     return postCollection;
+  }
+
+  protected convertDateFromClient<T extends IPost | NewPost | PartialUpdatePost>(post: T): RestOf<T> {
+    return {
+      ...post,
+      submissionDate: post.submissionDate?.toJSON() ?? null,
+    };
+  }
+
+  protected convertDateFromServer(restPost: RestPost): IPost {
+    return {
+      ...restPost,
+      submissionDate: restPost.submissionDate ? dayjs(restPost.submissionDate) : undefined,
+    };
+  }
+
+  protected convertResponseFromServer(res: HttpResponse<RestPost>): HttpResponse<IPost> {
+    return res.clone({
+      body: res.body ? this.convertDateFromServer(res.body) : null,
+    });
+  }
+
+  protected convertResponseArrayFromServer(res: HttpResponse<RestPost[]>): HttpResponse<IPost[]> {
+    return res.clone({
+      body: res.body ? res.body.map(item => this.convertDateFromServer(item)) : null,
+    });
   }
 }

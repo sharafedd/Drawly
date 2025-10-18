@@ -8,10 +8,10 @@
     -->
     <changeSet id="20240221124834-2" author="jhipster">
 
-        <addForeignKeyConstraint baseColumnNames="prompt_id"
+        <addForeignKeyConstraint baseColumnNames="competition_prompt_id"
                                  baseTableName="competition"
-                                 constraintName="fk_competition__prompt_id"
+                                 constraintName="fk_competition__competition_prompt_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="prompt"/>
+                                 referencedTableName="competition_prompt"/>
     </changeSet>
 </databaseChangeLog>

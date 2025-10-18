@@ -20,12 +20,12 @@ describe('Post Form Service', () => {
         expect(formGroup.controls).toEqual(
           expect.objectContaining({
             id: expect.any(Object),
-            postID: expect.any(Object),
             linkedPrompt: expect.any(Object),
             linkedUser: expect.any(Object),
             postContent: expect.any(Object),
-            avergaeStar: expect.any(Object),
-            user: expect.any(Object),
+            averageStar: expect.any(Object),
+            submissionDate: expect.any(Object),
+            comment: expect.any(Object),
           })
         );
       });
@@ -36,12 +36,12 @@ describe('Post Form Service', () => {
         expect(formGroup.controls).toEqual(
           expect.objectContaining({
             id: expect.any(Object),
-            postID: expect.any(Object),
             linkedPrompt: expect.any(Object),
             linkedUser: expect.any(Object),
             postContent: expect.any(Object),
-            avergaeStar: expect.any(Object),
-            user: expect.any(Object),
+            averageStar: expect.any(Object),
+            submissionDate: expect.any(Object),
+            comment: expect.any(Object),
           })
         );
       });

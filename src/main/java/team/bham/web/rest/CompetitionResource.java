@@ -123,11 +123,14 @@ public class CompetitionResource {
         Optional<Competition> result = competitionRepository
             .findById(competition.getId())
             .map(existingCompetition -> {
-                if (competition.getCompType() != null) {
-                    existingCompetition.setCompType(competition.getCompType());
+                if (competition.getLinkedPrompt() != null) {
+                    existingCompetition.setLinkedPrompt(competition.getLinkedPrompt());
                 }
-                if (competition.getTotalParticipants() != null) {
-                    existingCompetition.setTotalParticipants(competition.getTotalParticipants());
+                if (competition.getCompetitionType() != null) {
+                    existingCompetition.setCompetitionType(competition.getCompetitionType());
+                }
+                if (competition.getNoOfParticipants() != null) {
+                    existingCompetition.setNoOfParticipants(competition.getNoOfParticipants());
                 }
 
                 return existingCompetition;

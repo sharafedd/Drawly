@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
+import dayjs from 'dayjs/esm';
+import { DATE_TIME_FORMAT } from 'app/config/input.constants';
 import { IPost, NewPost } from '../post.model';
 
 /**
@@ -14,17 +16,28 @@ type PartialWithRequiredKeyOf<T extends { id: unknown }> = Partial<Omit<T, 'id'>
  */
 type PostFormGroupInput = IPost | PartialWithRequiredKeyOf<NewPost>;
 
-type PostFormDefaults = Pick<NewPost, 'id'>;
+/**
+ * Type that converts some properties for forms.
+ */
+type FormValueOf<T extends IPost | NewPost> = Omit<T, 'submissionDate'> & {
+  submissionDate?: string | null;
+};
+
+type PostFormRawValue = FormValueOf<IPost>;
+
+type NewPostFormRawValue = FormValueOf<NewPost>;
+
+type PostFormDefaults = Pick<NewPost, 'id' | 'submissionDate'>;
 
 type PostFormGroupContent = {
-  id: FormControl<IPost['id'] | NewPost['id']>;
-  postID: FormControl<IPost['postID']>;
-  linkedPrompt: FormControl<IPost['linkedPrompt']>;
-  linkedUser: FormControl<IPost['linkedUser']>;
-  postContent: FormControl<IPost['postContent']>;
-  postContentContentType: FormControl<IPost['postContentContentType']>;
-  avergaeStar: FormControl<IPost['avergaeStar']>;
-  user: FormControl<IPost['user']>;
+  id: FormControl<PostFormRawValue['id'] | NewPost['id']>;
+  linkedPrompt: FormControl<PostFormRawValue['linkedPrompt']>;
+  linkedUser: FormControl<PostFormRawValue['linkedUser']>;
+  postContent: FormControl<PostFormRawValue['postContent']>;
+  postContentContentType: FormControl<PostFormRawValue['postContentContentType']>;
+  averageStar: FormControl<PostFormRawValue['averageStar']>;
+  submissionDate: FormControl<PostFormRawValue['submissionDate']>;
+  comment: FormControl<PostFormRawValue['comment']>;
 };
 
 export type PostFormGroup = FormGroup<PostFormGroupContent>;
@@ -32,10 +45,10 @@ export type PostFormGroup = FormGroup<PostFormGroupContent>;
 @Injectable({ providedIn: 'root' })
 export class PostFormService {
   createPostFormGroup(post: PostFormGroupInput = { id: null }): PostFormGroup {
-    const postRawValue = {
+    const postRawValue = this.convertPostToPostRawValue({
       ...this.getFormDefaults(),
       ...post,
-    };
+    });
     return new FormGroup<PostFormGroupContent>({
       id: new FormControl(
         { value: postRawValue.id, disabled: true },
@@ -44,22 +57,22 @@ export class PostFormService {
           validators: [Validators.required],
         }
       ),
-      postID: new FormControl(postRawValue.postID),
       linkedPrompt: new FormControl(postRawValue.linkedPrompt),
       linkedUser: new FormControl(postRawValue.linkedUser),
       postContent: new FormControl(postRawValue.postContent),
       postContentContentType: new FormControl(postRawValue.postContentContentType),
-      avergaeStar: new FormControl(postRawValue.avergaeStar),
-      user: new FormControl(postRawValue.user),
+      averageStar: new FormControl(postRawValue.averageStar),
+      submissionDate: new FormControl(postRawValue.submissionDate),
+      comment: new FormControl(postRawValue.comment),
     });
   }
 
   getPost(form: PostFormGroup): IPost | NewPost {
-    return form.getRawValue() as IPost | NewPost;
+    return this.convertPostRawValueToPost(form.getRawValue() as PostFormRawValue | NewPostFormRawValue);
   }
 
   resetForm(form: PostFormGroup, post: PostFormGroupInput): void {
-    const postRawValue = { ...this.getFormDefaults(), ...post };
+    const postRawValue = this.convertPostToPostRawValue({ ...this.getFormDefaults(), ...post });
     form.reset(
       {
         ...postRawValue,
@@ -69,8 +82,27 @@ export class PostFormService {
   }
 
   private getFormDefaults(): PostFormDefaults {
+    const currentTime = dayjs();
+
     return {
       id: null,
+      submissionDate: currentTime,
+    };
+  }
+
+  private convertPostRawValueToPost(rawPost: PostFormRawValue | NewPostFormRawValue): IPost | NewPost {
+    return {
+      ...rawPost,
+      submissionDate: dayjs(rawPost.submissionDate, DATE_TIME_FORMAT),
+    };
+  }
+
+  private convertPostToPostRawValue(
+    post: IPost | (Partial<NewPost> & PostFormDefaults)
+  ): PostFormRawValue | PartialWithRequiredKeyOf<NewPostFormRawValue> {
+    return {
+      ...post,
+      submissionDate: post.submissionDate ? post.submissionDate.format(DATE_TIME_FORMAT) : undefined,
     };
   }
 }

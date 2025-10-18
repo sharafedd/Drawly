@@ -9,8 +9,8 @@ import { of, Subject, from } from 'rxjs';
 import { CompetitionFormService } from './competition-form.service';
 import { CompetitionService } from '../service/competition.service';
 import { ICompetition } from '../competition.model';
-import { IPrompt } from 'app/entities/prompt/prompt.model';
-import { PromptService } from 'app/entities/prompt/service/prompt.service';
+import { ICompetitionPrompt } from 'app/entities/competition-prompt/competition-prompt.model';
+import { CompetitionPromptService } from 'app/entities/competition-prompt/service/competition-prompt.service';
 
 import { CompetitionUpdateComponent } from './competition-update.component';
 
@@ -20,7 +20,7 @@ describe('Competition Management Update Component', () => {
   let activatedRoute: ActivatedRoute;
   let competitionFormService: CompetitionFormService;
   let competitionService: CompetitionService;
-  let promptService: PromptService;
+  let competitionPromptService: CompetitionPromptService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -43,43 +43,42 @@ describe('Competition Management Update Component', () => {
     activatedRoute = TestBed.inject(ActivatedRoute);
     competitionFormService = TestBed.inject(CompetitionFormService);
     competitionService = TestBed.inject(CompetitionService);
-    promptService = TestBed.inject(PromptService);
+    competitionPromptService = TestBed.inject(CompetitionPromptService);
 
     comp = fixture.componentInstance;
   });
 
   describe('ngOnInit', () => {
-    it('Should call Prompt query and add missing value', () => {
+    it('Should call competitionPrompt query and add missing value', () => {
       const competition: ICompetition = { id: 456 };
-      const prompt: IPrompt = { id: 55794 };
-      competition.prompt = prompt;
+      const competitionPrompt: ICompetitionPrompt = { id: 54410 };
+      competition.competitionPrompt = competitionPrompt;
 
-      const promptCollection: IPrompt[] = [{ id: 2008 }];
-      jest.spyOn(promptService, 'query').mockReturnValue(of(new HttpResponse({ body: promptCollection })));
-      const additionalPrompts = [prompt];
-      const expectedCollection: IPrompt[] = [...additionalPrompts, ...promptCollection];
-      jest.spyOn(promptService, 'addPromptToCollectionIfMissing').mockReturnValue(expectedCollection);
+      const competitionPromptCollection: ICompetitionPrompt[] = [{ id: 35505 }];
+      jest.spyOn(competitionPromptService, 'query').mockReturnValue(of(new HttpResponse({ body: competitionPromptCollection })));
+      const expectedCollection: ICompetitionPrompt[] = [competitionPrompt, ...competitionPromptCollection];
+      jest.spyOn(competitionPromptService, 'addCompetitionPromptToCollectionIfMissing').mockReturnValue(expectedCollection);
 
       activatedRoute.data = of({ competition });
       comp.ngOnInit();
 
-      expect(promptService.query).toHaveBeenCalled();
-      expect(promptService.addPromptToCollectionIfMissing).toHaveBeenCalledWith(
-        promptCollection,
-        ...additionalPrompts.map(expect.objectContaining)
+      expect(competitionPromptService.query).toHaveBeenCalled();
+      expect(competitionPromptService.addCompetitionPromptToCollectionIfMissing).toHaveBeenCalledWith(
+        competitionPromptCollection,
+        competitionPrompt
       );
-      expect(comp.promptsSharedCollection).toEqual(expectedCollection);
+      expect(comp.competitionPromptsCollection).toEqual(expectedCollection);
     });
 
     it('Should update editForm', () => {
       const competition: ICompetition = { id: 456 };
-      const prompt: IPrompt = { id: 62827 };
-      competition.prompt = prompt;
+      const competitionPrompt: ICompetitionPrompt = { id: 92954 };
+      competition.competitionPrompt = competitionPrompt;
 
       activatedRoute.data = of({ competition });
       comp.ngOnInit();
 
-      expect(comp.promptsSharedCollection).toContain(prompt);
+      expect(comp.competitionPromptsCollection).toContain(competitionPrompt);
       expect(comp.competition).toEqual(competition);
     });
   });
@@ -153,13 +152,13 @@ describe('Competition Management Update Component', () => {
   });
 
   describe('Compare relationships', () => {
-    describe('comparePrompt', () => {
-      it('Should forward to promptService', () => {
+    describe('compareCompetitionPrompt', () => {
+      it('Should forward to competitionPromptService', () => {
         const entity = { id: 123 };
         const entity2 = { id: 456 };
-        jest.spyOn(promptService, 'comparePrompt');
-        comp.comparePrompt(entity, entity2);
-        expect(promptService.comparePrompt).toHaveBeenCalledWith(entity, entity2);
+        jest.spyOn(competitionPromptService, 'compareCompetitionPrompt');
+        comp.compareCompetitionPrompt(entity, entity2);
+        expect(competitionPromptService.compareCompetitionPrompt).toHaveBeenCalledWith(entity, entity2);
       });
     });
   });

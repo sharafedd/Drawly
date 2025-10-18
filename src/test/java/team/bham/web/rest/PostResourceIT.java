@@ -5,6 +5,8 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
@@ -30,22 +32,22 @@ import team.bham.repository.PostRepository;
 @WithMockUser
 class PostResourceIT {
 
-    private static final Integer DEFAULT_POST_ID = 1;
-    private static final Integer UPDATED_POST_ID = 2;
+    private static final Long DEFAULT_LINKED_PROMPT = 1L;
+    private static final Long UPDATED_LINKED_PROMPT = 2L;
 
-    private static final Integer DEFAULT_LINKED_PROMPT = 1;
-    private static final Integer UPDATED_LINKED_PROMPT = 2;
-
-    private static final Integer DEFAULT_LINKED_USER = 1;
-    private static final Integer UPDATED_LINKED_USER = 2;
+    private static final Long DEFAULT_LINKED_USER = 1L;
+    private static final Long UPDATED_LINKED_USER = 2L;
 
     private static final byte[] DEFAULT_POST_CONTENT = TestUtil.createByteArray(1, "0");
     private static final byte[] UPDATED_POST_CONTENT = TestUtil.createByteArray(1, "1");
     private static final String DEFAULT_POST_CONTENT_CONTENT_TYPE = "image/jpg";
     private static final String UPDATED_POST_CONTENT_CONTENT_TYPE = "image/png";
 
-    private static final Float DEFAULT_AVERGAE_STAR = 1F;
-    private static final Float UPDATED_AVERGAE_STAR = 2F;
+    private static final Float DEFAULT_AVERAGE_STAR = 1F;
+    private static final Float UPDATED_AVERAGE_STAR = 2F;
+
+    private static final Instant DEFAULT_SUBMISSION_DATE = Instant.ofEpochMilli(0L);
+    private static final Instant UPDATED_SUBMISSION_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
     private static final String ENTITY_API_URL = "/api/posts";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -72,12 +74,12 @@ class PostResourceIT {
      */
     public static Post createEntity(EntityManager em) {
         Post post = new Post()
-            .postID(DEFAULT_POST_ID)
             .linkedPrompt(DEFAULT_LINKED_PROMPT)
             .linkedUser(DEFAULT_LINKED_USER)
             .postContent(DEFAULT_POST_CONTENT)
             .postContentContentType(DEFAULT_POST_CONTENT_CONTENT_TYPE)
-            .avergaeStar(DEFAULT_AVERGAE_STAR);
+            .averageStar(DEFAULT_AVERAGE_STAR)
+            .submissionDate(DEFAULT_SUBMISSION_DATE);
         return post;
     }
 
@@ -89,12 +91,12 @@ class PostResourceIT {
      */
     public static Post createUpdatedEntity(EntityManager em) {
         Post post = new Post()
-            .postID(UPDATED_POST_ID)
             .linkedPrompt(UPDATED_LINKED_PROMPT)
             .linkedUser(UPDATED_LINKED_USER)
             .postContent(UPDATED_POST_CONTENT)
             .postContentContentType(UPDATED_POST_CONTENT_CONTENT_TYPE)
-            .avergaeStar(UPDATED_AVERGAE_STAR);
+            .averageStar(UPDATED_AVERAGE_STAR)
+            .submissionDate(UPDATED_SUBMISSION_DATE);
         return post;
     }
 
@@ -116,12 +118,12 @@ class PostResourceIT {
         List<Post> postList = postRepository.findAll();
         assertThat(postList).hasSize(databaseSizeBeforeCreate + 1);
         Post testPost = postList.get(postList.size() - 1);
-        assertThat(testPost.getPostID()).isEqualTo(DEFAULT_POST_ID);
         assertThat(testPost.getLinkedPrompt()).isEqualTo(DEFAULT_LINKED_PROMPT);
         assertThat(testPost.getLinkedUser()).isEqualTo(DEFAULT_LINKED_USER);
         assertThat(testPost.getPostContent()).isEqualTo(DEFAULT_POST_CONTENT);
         assertThat(testPost.getPostContentContentType()).isEqualTo(DEFAULT_POST_CONTENT_CONTENT_TYPE);
-        assertThat(testPost.getAvergaeStar()).isEqualTo(DEFAULT_AVERGAE_STAR);
+        assertThat(testPost.getAverageStar()).isEqualTo(DEFAULT_AVERAGE_STAR);
+        assertThat(testPost.getSubmissionDate()).isEqualTo(DEFAULT_SUBMISSION_DATE);
     }
 
     @Test
@@ -154,12 +156,12 @@ class PostResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(post.getId().intValue())))
-            .andExpect(jsonPath("$.[*].postID").value(hasItem(DEFAULT_POST_ID)))
-            .andExpect(jsonPath("$.[*].linkedPrompt").value(hasItem(DEFAULT_LINKED_PROMPT)))
-            .andExpect(jsonPath("$.[*].linkedUser").value(hasItem(DEFAULT_LINKED_USER)))
+            .andExpect(jsonPath("$.[*].linkedPrompt").value(hasItem(DEFAULT_LINKED_PROMPT.intValue())))
+            .andExpect(jsonPath("$.[*].linkedUser").value(hasItem(DEFAULT_LINKED_USER.intValue())))
             .andExpect(jsonPath("$.[*].postContentContentType").value(hasItem(DEFAULT_POST_CONTENT_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].postContent").value(hasItem(Base64Utils.encodeToString(DEFAULT_POST_CONTENT))))
-            .andExpect(jsonPath("$.[*].avergaeStar").value(hasItem(DEFAULT_AVERGAE_STAR.doubleValue())));
+            .andExpect(jsonPath("$.[*].averageStar").value(hasItem(DEFAULT_AVERAGE_STAR.doubleValue())))
+            .andExpect(jsonPath("$.[*].submissionDate").value(hasItem(DEFAULT_SUBMISSION_DATE.toString())));
     }
 
     @Test
@@ -174,12 +176,12 @@ class PostResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(post.getId().intValue()))
-            .andExpect(jsonPath("$.postID").value(DEFAULT_POST_ID))
-            .andExpect(jsonPath("$.linkedPrompt").value(DEFAULT_LINKED_PROMPT))
-            .andExpect(jsonPath("$.linkedUser").value(DEFAULT_LINKED_USER))
+            .andExpect(jsonPath("$.linkedPrompt").value(DEFAULT_LINKED_PROMPT.intValue()))
+            .andExpect(jsonPath("$.linkedUser").value(DEFAULT_LINKED_USER.intValue()))
             .andExpect(jsonPath("$.postContentContentType").value(DEFAULT_POST_CONTENT_CONTENT_TYPE))
             .andExpect(jsonPath("$.postContent").value(Base64Utils.encodeToString(DEFAULT_POST_CONTENT)))
-            .andExpect(jsonPath("$.avergaeStar").value(DEFAULT_AVERGAE_STAR.doubleValue()));
+            .andExpect(jsonPath("$.averageStar").value(DEFAULT_AVERAGE_STAR.doubleValue()))
+            .andExpect(jsonPath("$.submissionDate").value(DEFAULT_SUBMISSION_DATE.toString()));
     }
 
     @Test
@@ -202,12 +204,12 @@ class PostResourceIT {
         // Disconnect from session so that the updates on updatedPost are not directly saved in db
         em.detach(updatedPost);
         updatedPost
-            .postID(UPDATED_POST_ID)
             .linkedPrompt(UPDATED_LINKED_PROMPT)
             .linkedUser(UPDATED_LINKED_USER)
             .postContent(UPDATED_POST_CONTENT)
             .postContentContentType(UPDATED_POST_CONTENT_CONTENT_TYPE)
-            .avergaeStar(UPDATED_AVERGAE_STAR);
+            .averageStar(UPDATED_AVERAGE_STAR)
+            .submissionDate(UPDATED_SUBMISSION_DATE);
 
         restPostMockMvc
             .perform(
@@ -221,12 +223,12 @@ class PostResourceIT {
         List<Post> postList = postRepository.findAll();
         assertThat(postList).hasSize(databaseSizeBeforeUpdate);
         Post testPost = postList.get(postList.size() - 1);
-        assertThat(testPost.getPostID()).isEqualTo(UPDATED_POST_ID);
         assertThat(testPost.getLinkedPrompt()).isEqualTo(UPDATED_LINKED_PROMPT);
         assertThat(testPost.getLinkedUser()).isEqualTo(UPDATED_LINKED_USER);
         assertThat(testPost.getPostContent()).isEqualTo(UPDATED_POST_CONTENT);
         assertThat(testPost.getPostContentContentType()).isEqualTo(UPDATED_POST_CONTENT_CONTENT_TYPE);
-        assertThat(testPost.getAvergaeStar()).isEqualTo(UPDATED_AVERGAE_STAR);
+        assertThat(testPost.getAverageStar()).isEqualTo(UPDATED_AVERAGE_STAR);
+        assertThat(testPost.getSubmissionDate()).isEqualTo(UPDATED_SUBMISSION_DATE);
     }
 
     @Test
@@ -297,7 +299,7 @@ class PostResourceIT {
         Post partialUpdatedPost = new Post();
         partialUpdatedPost.setId(post.getId());
 
-        partialUpdatedPost.postContent(UPDATED_POST_CONTENT).postContentContentType(UPDATED_POST_CONTENT_CONTENT_TYPE);
+        partialUpdatedPost.averageStar(UPDATED_AVERAGE_STAR);
 
         restPostMockMvc
             .perform(
@@ -311,12 +313,12 @@ class PostResourceIT {
         List<Post> postList = postRepository.findAll();
         assertThat(postList).hasSize(databaseSizeBeforeUpdate);
         Post testPost = postList.get(postList.size() - 1);
-        assertThat(testPost.getPostID()).isEqualTo(DEFAULT_POST_ID);
         assertThat(testPost.getLinkedPrompt()).isEqualTo(DEFAULT_LINKED_PROMPT);
         assertThat(testPost.getLinkedUser()).isEqualTo(DEFAULT_LINKED_USER);
-        assertThat(testPost.getPostContent()).isEqualTo(UPDATED_POST_CONTENT);
-        assertThat(testPost.getPostContentContentType()).isEqualTo(UPDATED_POST_CONTENT_CONTENT_TYPE);
-        assertThat(testPost.getAvergaeStar()).isEqualTo(DEFAULT_AVERGAE_STAR);
+        assertThat(testPost.getPostContent()).isEqualTo(DEFAULT_POST_CONTENT);
+        assertThat(testPost.getPostContentContentType()).isEqualTo(DEFAULT_POST_CONTENT_CONTENT_TYPE);
+        assertThat(testPost.getAverageStar()).isEqualTo(UPDATED_AVERAGE_STAR);
+        assertThat(testPost.getSubmissionDate()).isEqualTo(DEFAULT_SUBMISSION_DATE);
     }
 
     @Test
@@ -332,12 +334,12 @@ class PostResourceIT {
         partialUpdatedPost.setId(post.getId());
 
         partialUpdatedPost
-            .postID(UPDATED_POST_ID)
             .linkedPrompt(UPDATED_LINKED_PROMPT)
             .linkedUser(UPDATED_LINKED_USER)
             .postContent(UPDATED_POST_CONTENT)
             .postContentContentType(UPDATED_POST_CONTENT_CONTENT_TYPE)
-            .avergaeStar(UPDATED_AVERGAE_STAR);
+            .averageStar(UPDATED_AVERAGE_STAR)
+            .submissionDate(UPDATED_SUBMISSION_DATE);
 
         restPostMockMvc
             .perform(
@@ -351,12 +353,12 @@ class PostResourceIT {
         List<Post> postList = postRepository.findAll();
         assertThat(postList).hasSize(databaseSizeBeforeUpdate);
         Post testPost = postList.get(postList.size() - 1);
-        assertThat(testPost.getPostID()).isEqualTo(UPDATED_POST_ID);
         assertThat(testPost.getLinkedPrompt()).isEqualTo(UPDATED_LINKED_PROMPT);
         assertThat(testPost.getLinkedUser()).isEqualTo(UPDATED_LINKED_USER);
         assertThat(testPost.getPostContent()).isEqualTo(UPDATED_POST_CONTENT);
         assertThat(testPost.getPostContentContentType()).isEqualTo(UPDATED_POST_CONTENT_CONTENT_TYPE);
-        assertThat(testPost.getAvergaeStar()).isEqualTo(UPDATED_AVERGAE_STAR);
+        assertThat(testPost.getAverageStar()).isEqualTo(UPDATED_AVERAGE_STAR);
+        assertThat(testPost.getSubmissionDate()).isEqualTo(UPDATED_SUBMISSION_DATE);
     }
 
     @Test

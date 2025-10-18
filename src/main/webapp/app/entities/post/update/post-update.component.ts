@@ -10,8 +10,8 @@ import { PostService } from '../service/post.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
 import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
 import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
-import { IUser } from 'app/entities/user/user.model';
-import { UserService } from 'app/entities/user/user.service';
+import { IComment } from 'app/entities/comment/comment.model';
+import { CommentService } from 'app/entities/comment/service/comment.service';
 
 @Component({
   selector: 'jhi-post-update',
@@ -21,7 +21,7 @@ export class PostUpdateComponent implements OnInit {
   isSaving = false;
   post: IPost | null = null;
 
-  usersSharedCollection: IUser[] = [];
+  commentsSharedCollection: IComment[] = [];
 
   editForm: PostFormGroup = this.postFormService.createPostFormGroup();
 
@@ -30,12 +30,12 @@ export class PostUpdateComponent implements OnInit {
     protected eventManager: EventManager,
     protected postService: PostService,
     protected postFormService: PostFormService,
-    protected userService: UserService,
+    protected commentService: CommentService,
     protected elementRef: ElementRef,
     protected activatedRoute: ActivatedRoute
   ) {}
 
-  compareUser = (o1: IUser | null, o2: IUser | null): boolean => this.userService.compareUser(o1, o2);
+  compareComment = (o1: IComment | null, o2: IComment | null): boolean => this.commentService.compareComment(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ post }) => {
@@ -110,14 +110,17 @@ export class PostUpdateComponent implements OnInit {
     this.post = post;
     this.postFormService.resetForm(this.editForm, post);
 
-    this.usersSharedCollection = this.userService.addUserToCollectionIfMissing<IUser>(this.usersSharedCollection, post.user);
+    this.commentsSharedCollection = this.commentService.addCommentToCollectionIfMissing<IComment>(
+      this.commentsSharedCollection,
+      post.comment
+    );
   }
 
   protected loadRelationshipsOptions(): void {
-    this.userService
+    this.commentService
       .query()
-      .pipe(map((res: HttpResponse<IUser[]>) => res.body ?? []))
-      .pipe(map((users: IUser[]) => this.userService.addUserToCollectionIfMissing<IUser>(users, this.post?.user)))
-      .subscribe((users: IUser[]) => (this.usersSharedCollection = users));
+      .pipe(map((res: HttpResponse<IComment[]>) => res.body ?? []))
+      .pipe(map((comments: IComment[]) => this.commentService.addCommentToCollectionIfMissing<IComment>(comments, this.post?.comment)))
+      .subscribe((comments: IComment[]) => (this.commentsSharedCollection = comments));
   }
 }

@@ -2,6 +2,7 @@ package team.bham.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.*;
@@ -25,14 +26,11 @@ public class Post implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "post_id")
-    private Integer postID;
-
     @Column(name = "linked_prompt")
-    private Integer linkedPrompt;
+    private Long linkedPrompt;
 
     @Column(name = "linked_user")
-    private Integer linkedUser;
+    private Long linkedUser;
 
     @Lob
     @Column(name = "post_content")
@@ -41,16 +39,20 @@ public class Post implements Serializable {
     @Column(name = "post_content_content_type")
     private String postContentContentType;
 
-    @Column(name = "avergae_star")
-    private Float avergaeStar;
+    @Column(name = "average_star")
+    private Float averageStar;
+
+    @Column(name = "submission_date")
+    private Instant submissionDate;
 
     @OneToMany(mappedBy = "post")
     @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    @JsonIgnoreProperties(value = { "post" }, allowSetters = true)
-    private Set<Prompt> prompts = new HashSet<>();
+    @JsonIgnoreProperties(value = { "competition", "post" }, allowSetters = true)
+    private Set<CompetitionPrompt> competitionPrompts = new HashSet<>();
 
     @ManyToOne
-    private User user;
+    @JsonIgnoreProperties(value = { "posts" }, allowSetters = true)
+    private Comment comment;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -67,42 +69,29 @@ public class Post implements Serializable {
         this.id = id;
     }
 
-    public Integer getPostID() {
-        return this.postID;
-    }
-
-    public Post postID(Integer postID) {
-        this.setPostID(postID);
-        return this;
-    }
-
-    public void setPostID(Integer postID) {
-        this.postID = postID;
-    }
-
-    public Integer getLinkedPrompt() {
+    public Long getLinkedPrompt() {
         return this.linkedPrompt;
     }
 
-    public Post linkedPrompt(Integer linkedPrompt) {
+    public Post linkedPrompt(Long linkedPrompt) {
         this.setLinkedPrompt(linkedPrompt);
         return this;
     }
 
-    public void setLinkedPrompt(Integer linkedPrompt) {
+    public void setLinkedPrompt(Long linkedPrompt) {
         this.linkedPrompt = linkedPrompt;
     }
 
-    public Integer getLinkedUser() {
+    public Long getLinkedUser() {
         return this.linkedUser;
     }
 
-    public Post linkedUser(Integer linkedUser) {
+    public Post linkedUser(Long linkedUser) {
         this.setLinkedUser(linkedUser);
         return this;
     }
 
-    public void setLinkedUser(Integer linkedUser) {
+    public void setLinkedUser(Long linkedUser) {
         this.linkedUser = linkedUser;
     }
 
@@ -132,60 +121,73 @@ public class Post implements Serializable {
         this.postContentContentType = postContentContentType;
     }
 
-    public Float getAvergaeStar() {
-        return this.avergaeStar;
+    public Float getAverageStar() {
+        return this.averageStar;
     }
 
-    public Post avergaeStar(Float avergaeStar) {
-        this.setAvergaeStar(avergaeStar);
+    public Post averageStar(Float averageStar) {
+        this.setAverageStar(averageStar);
         return this;
     }
 
-    public void setAvergaeStar(Float avergaeStar) {
-        this.avergaeStar = avergaeStar;
+    public void setAverageStar(Float averageStar) {
+        this.averageStar = averageStar;
     }
 
-    public Set<Prompt> getPrompts() {
-        return this.prompts;
+    public Instant getSubmissionDate() {
+        return this.submissionDate;
     }
 
-    public void setPrompts(Set<Prompt> prompts) {
-        if (this.prompts != null) {
-            this.prompts.forEach(i -> i.setPost(null));
+    public Post submissionDate(Instant submissionDate) {
+        this.setSubmissionDate(submissionDate);
+        return this;
+    }
+
+    public void setSubmissionDate(Instant submissionDate) {
+        this.submissionDate = submissionDate;
+    }
+
+    public Set<CompetitionPrompt> getCompetitionPrompts() {
+        return this.competitionPrompts;
+    }
+
+    public void setCompetitionPrompts(Set<CompetitionPrompt> competitionPrompts) {
+        if (this.competitionPrompts != null) {
+            this.competitionPrompts.forEach(i -> i.setPost(null));
         }
-        if (prompts != null) {
-            prompts.forEach(i -> i.setPost(this));
+        if (competitionPrompts != null) {
+            competitionPrompts.forEach(i -> i.setPost(this));
         }
-        this.prompts = prompts;
+        this.competitionPrompts = competitionPrompts;
     }
 
-    public Post prompts(Set<Prompt> prompts) {
-        this.setPrompts(prompts);
+    public Post competitionPrompts(Set<CompetitionPrompt> competitionPrompts) {
+        this.setCompetitionPrompts(competitionPrompts);
         return this;
     }
 
-    public Post addPrompt(Prompt prompt) {
-        this.prompts.add(prompt);
-        prompt.setPost(this);
+    public Post addCompetitionPrompt(CompetitionPrompt competitionPrompt) {
+        this.competitionPrompts.add(competitionPrompt);
+        competitionPrompt.setPost(this);
         return this;
     }
 
-    public Post removePrompt(Prompt prompt) {
-        this.prompts.remove(prompt);
-        prompt.setPost(null);
+    public Post removeCompetitionPrompt(CompetitionPrompt competitionPrompt) {
+        this.competitionPrompts.remove(competitionPrompt);
+        competitionPrompt.setPost(null);
         return this;
     }
 
-    public User getUser() {
-        return this.user;
+    public Comment getComment() {
+        return this.comment;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setComment(Comment comment) {
+        this.comment = comment;
     }
 
-    public Post user(User user) {
-        this.setUser(user);
+    public Post comment(Comment comment) {
+        this.setComment(comment);
         return this;
     }
 
@@ -213,12 +215,12 @@ public class Post implements Serializable {
     public String toString() {
         return "Post{" +
             "id=" + getId() +
-            ", postID=" + getPostID() +
             ", linkedPrompt=" + getLinkedPrompt() +
             ", linkedUser=" + getLinkedUser() +
             ", postContent='" + getPostContent() + "'" +
             ", postContentContentType='" + getPostContentContentType() + "'" +
-            ", avergaeStar=" + getAvergaeStar() +
+            ", averageStar=" + getAverageStar() +
+            ", submissionDate='" + getSubmissionDate() + "'" +
             "}";
     }
 }

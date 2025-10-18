@@ -12,34 +12,57 @@
         </div>
 
         <div class="row mb-3">
-          <label class="form-label" for="field_compType">Comp Type</label>
-          <input type="checkbox" class="form-check" name="compType" id="field_compType" data-cy="compType" formControlName="compType" />
-        </div>
-
-        <div class="row mb-3">
-          <label class="form-label" for="field_totalParticipants">Total Participants</label>
+          <label class="form-label" for="field_linkedPrompt">Linked Prompt</label>
           <input
             type="number"
             class="form-control"
-            name="totalParticipants"
-            id="field_totalParticipants"
-            data-cy="totalParticipants"
-            formControlName="totalParticipants"
+            name="linkedPrompt"
+            id="field_linkedPrompt"
+            data-cy="linkedPrompt"
+            formControlName="linkedPrompt"
           />
         </div>
 
         <div class="row mb-3">
-          <label class="form-label" for="field_prompt">Prompt</label>
+          <label class="form-label" for="field_competitionType">Competition Type</label>
           <select
             class="form-control"
-            id="field_prompt"
-            data-cy="prompt"
-            name="prompt"
-            formControlName="prompt"
-            [compareWith]="comparePrompt"
+            name="competitionType"
+            formControlName="competitionType"
+            id="field_competitionType"
+            data-cy="competitionType"
           >
             <option [ngValue]="null"></option>
-            <option [ngValue]="promptOption" *ngFor="let promptOption of promptsSharedCollection">{{ promptOption.id }}</option>
+            <option *ngFor="let competitionType of competitionTypeValues" [value]="competitionType">competitionType</option>
+          </select>
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_noOfParticipants">No Of Participants</label>
+          <input
+            type="number"
+            class="form-control"
+            name="noOfParticipants"
+            id="field_noOfParticipants"
+            data-cy="noOfParticipants"
+            formControlName="noOfParticipants"
+          />
+        </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_competitionPrompt">Competition Prompt</label>
+          <select
+            class="form-control"
+            id="field_competitionPrompt"
+            data-cy="competitionPrompt"
+            name="competitionPrompt"
+            formControlName="competitionPrompt"
+            [compareWith]="compareCompetitionPrompt"
+          >
+            <option [ngValue]="null"></option>
+            <option [ngValue]="competitionPromptOption" *ngFor="let competitionPromptOption of competitionPromptsCollection">
+              {{ competitionPromptOption.id }}
+            </option>
           </select>
         </div>
       </div>

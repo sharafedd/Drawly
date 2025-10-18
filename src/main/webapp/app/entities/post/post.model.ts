@@ -1,14 +1,15 @@
-import { IUser } from 'app/entities/user/user.model';
+import dayjs from 'dayjs/esm';
+import { IComment } from 'app/entities/comment/comment.model';
 
 export interface IPost {
   id: number;
-  postID?: number | null;
   linkedPrompt?: number | null;
   linkedUser?: number | null;
   postContent?: string | null;
   postContentContentType?: string | null;
-  avergaeStar?: number | null;
-  user?: Pick<IUser, 'id'> | null;
+  averageStar?: number | null;
+  submissionDate?: dayjs.Dayjs | null;
+  comment?: Pick<IComment, 'id'> | null;
 }
 
 export type NewPost = Omit<IPost, 'id'> & { id: null };

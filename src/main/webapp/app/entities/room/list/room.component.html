@@ -1,0 +1,139 @@
+<div>
+  <h2 id="page-heading" data-cy="RoomHeading">
+    <span>Rooms</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span>Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-room"
+        [routerLink]="['/room/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span> Create a new Room </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="rooms?.length === 0">
+    <span>No Rooms found</span>
+  </div>
+
+  <div class="table-responsive table-entities" id="entities" *ngIf="rooms && rooms.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+          <th scope="col" jhiSortBy="id">
+            <div class="d-flex">
+              <span>ID</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="noOfRounds">
+            <div class="d-flex">
+              <span>No Of Rounds</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="noOfPlayers">
+            <div class="d-flex">
+              <span>No Of Players</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="roomType">
+            <div class="d-flex">
+              <span>Room Type</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="roomCode">
+            <div class="d-flex">
+              <span>Room Code</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="theme">
+            <div class="d-flex">
+              <span>Theme</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="player.id">
+            <div class="d-flex">
+              <span>Player</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="round.id">
+            <div class="d-flex">
+              <span>Round</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="roundPrompt.id">
+            <div class="d-flex">
+              <span>Round Prompt</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let room of rooms; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/room', room.id, 'view']">{{ room.id }}</a>
+          </td>
+          <td>{{ room.noOfRounds }}</td>
+          <td>{{ room.noOfPlayers }}</td>
+          <td>{{ room.roomType }}</td>
+          <td>{{ room.roomCode }}</td>
+          <td>{{ room.theme }}</td>
+          <td>
+            <div *ngIf="room.player">
+              <a [routerLink]="['/player', room.player.id, 'view']">{{ room.player.id }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="room.round">
+              <a [routerLink]="['/round', room.round.id, 'view']">{{ room.round.id }}</a>
+            </div>
+          </td>
+          <td>
+            <div *ngIf="room.roundPrompt">
+              <a [routerLink]="['/round-prompt', room.roundPrompt.id, 'view']">{{ room.roundPrompt.id }}</a>
+            </div>
+          </td>
+          <td class="text-end">
+            <div class="btn-group">
+              <button type="submit" [routerLink]="['/room', room.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline">View</span>
+              </button>
+
+              <button type="submit" [routerLink]="['/room', room.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(room)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

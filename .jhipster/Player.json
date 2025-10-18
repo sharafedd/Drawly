@@ -1,0 +1,49 @@
+{
+  "applications": "*",
+  "changelogDate": "20240305074445",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "player",
+  "fields": [
+    {
+      "fieldName": "linkedUser",
+      "fieldType": "Long",
+      "fieldValidateRules": ["unique"]
+    },
+    {
+      "fieldName": "linkedRoom",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "username",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "drawing",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "image"
+    },
+    {
+      "fieldName": "totalStars",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "rank",
+      "fieldType": "Integer"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Player",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "room",
+      "otherEntityRelationshipName": "player",
+      "relationshipName": "room",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "service": "no"
+}

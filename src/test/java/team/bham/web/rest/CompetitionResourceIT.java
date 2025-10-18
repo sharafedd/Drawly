@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import team.bham.IntegrationTest;
 import team.bham.domain.Competition;
+import team.bham.domain.enumeration.CompetitionType;
 import team.bham.repository.CompetitionRepository;
 
 /**
@@ -29,11 +30,14 @@ import team.bham.repository.CompetitionRepository;
 @WithMockUser
 class CompetitionResourceIT {
 
-    private static final Boolean DEFAULT_COMP_TYPE = false;
-    private static final Boolean UPDATED_COMP_TYPE = true;
+    private static final Long DEFAULT_LINKED_PROMPT = 1L;
+    private static final Long UPDATED_LINKED_PROMPT = 2L;
 
-    private static final Integer DEFAULT_TOTAL_PARTICIPANTS = 1;
-    private static final Integer UPDATED_TOTAL_PARTICIPANTS = 2;
+    private static final CompetitionType DEFAULT_COMPETITION_TYPE = CompetitionType.Daily;
+    private static final CompetitionType UPDATED_COMPETITION_TYPE = CompetitionType.Weekly;
+
+    private static final Long DEFAULT_NO_OF_PARTICIPANTS = 1L;
+    private static final Long UPDATED_NO_OF_PARTICIPANTS = 2L;
 
     private static final String ENTITY_API_URL = "/api/competitions";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -59,7 +63,10 @@ class CompetitionResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Competition createEntity(EntityManager em) {
-        Competition competition = new Competition().compType(DEFAULT_COMP_TYPE).totalParticipants(DEFAULT_TOTAL_PARTICIPANTS);
+        Competition competition = new Competition()
+            .linkedPrompt(DEFAULT_LINKED_PROMPT)
+            .competitionType(DEFAULT_COMPETITION_TYPE)
+            .noOfParticipants(DEFAULT_NO_OF_PARTICIPANTS);
         return competition;
     }
 
@@ -70,7 +77,10 @@ class CompetitionResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static Competition createUpdatedEntity(EntityManager em) {
-        Competition competition = new Competition().compType(UPDATED_COMP_TYPE).totalParticipants(UPDATED_TOTAL_PARTICIPANTS);
+        Competition competition = new Competition()
+            .linkedPrompt(UPDATED_LINKED_PROMPT)
+            .competitionType(UPDATED_COMPETITION_TYPE)
+            .noOfParticipants(UPDATED_NO_OF_PARTICIPANTS);
         return competition;
     }
 
@@ -92,8 +102,9 @@ class CompetitionResourceIT {
         List<Competition> competitionList = competitionRepository.findAll();
         assertThat(competitionList).hasSize(databaseSizeBeforeCreate + 1);
         Competition testCompetition = competitionList.get(competitionList.size() - 1);
-        assertThat(testCompetition.getCompType()).isEqualTo(DEFAULT_COMP_TYPE);
-        assertThat(testCompetition.getTotalParticipants()).isEqualTo(DEFAULT_TOTAL_PARTICIPANTS);
+        assertThat(testCompetition.getLinkedPrompt()).isEqualTo(DEFAULT_LINKED_PROMPT);
+        assertThat(testCompetition.getCompetitionType()).isEqualTo(DEFAULT_COMPETITION_TYPE);
+        assertThat(testCompetition.getNoOfParticipants()).isEqualTo(DEFAULT_NO_OF_PARTICIPANTS);
     }
 
     @Test
@@ -126,8 +137,9 @@ class CompetitionResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(competition.getId().intValue())))
-            .andExpect(jsonPath("$.[*].compType").value(hasItem(DEFAULT_COMP_TYPE.booleanValue())))
-            .andExpect(jsonPath("$.[*].totalParticipants").value(hasItem(DEFAULT_TOTAL_PARTICIPANTS)));
+            .andExpect(jsonPath("$.[*].linkedPrompt").value(hasItem(DEFAULT_LINKED_PROMPT.intValue())))
+            .andExpect(jsonPath("$.[*].competitionType").value(hasItem(DEFAULT_COMPETITION_TYPE.toString())))
+            .andExpect(jsonPath("$.[*].noOfParticipants").value(hasItem(DEFAULT_NO_OF_PARTICIPANTS.intValue())));
     }
 
     @Test
@@ -142,8 +154,9 @@ class CompetitionResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(competition.getId().intValue()))
-            .andExpect(jsonPath("$.compType").value(DEFAULT_COMP_TYPE.booleanValue()))
-            .andExpect(jsonPath("$.totalParticipants").value(DEFAULT_TOTAL_PARTICIPANTS));
+            .andExpect(jsonPath("$.linkedPrompt").value(DEFAULT_LINKED_PROMPT.intValue()))
+            .andExpect(jsonPath("$.competitionType").value(DEFAULT_COMPETITION_TYPE.toString()))
+            .andExpect(jsonPath("$.noOfParticipants").value(DEFAULT_NO_OF_PARTICIPANTS.intValue()));
     }
 
     @Test
@@ -165,7 +178,10 @@ class CompetitionResourceIT {
         Competition updatedCompetition = competitionRepository.findById(competition.getId()).get();
         // Disconnect from session so that the updates on updatedCompetition are not directly saved in db
         em.detach(updatedCompetition);
-        updatedCompetition.compType(UPDATED_COMP_TYPE).totalParticipants(UPDATED_TOTAL_PARTICIPANTS);
+        updatedCompetition
+            .linkedPrompt(UPDATED_LINKED_PROMPT)
+            .competitionType(UPDATED_COMPETITION_TYPE)
+            .noOfParticipants(UPDATED_NO_OF_PARTICIPANTS);
 
         restCompetitionMockMvc
             .perform(
@@ -179,8 +195,9 @@ class CompetitionResourceIT {
         List<Competition> competitionList = competitionRepository.findAll();
         assertThat(competitionList).hasSize(databaseSizeBeforeUpdate);
         Competition testCompetition = competitionList.get(competitionList.size() - 1);
-        assertThat(testCompetition.getCompType()).isEqualTo(UPDATED_COMP_TYPE);
-        assertThat(testCompetition.getTotalParticipants()).isEqualTo(UPDATED_TOTAL_PARTICIPANTS);
+        assertThat(testCompetition.getLinkedPrompt()).isEqualTo(UPDATED_LINKED_PROMPT);
+        assertThat(testCompetition.getCompetitionType()).isEqualTo(UPDATED_COMPETITION_TYPE);
+        assertThat(testCompetition.getNoOfParticipants()).isEqualTo(UPDATED_NO_OF_PARTICIPANTS);
     }
 
     @Test
@@ -251,7 +268,10 @@ class CompetitionResourceIT {
         Competition partialUpdatedCompetition = new Competition();
         partialUpdatedCompetition.setId(competition.getId());
 
-        partialUpdatedCompetition.compType(UPDATED_COMP_TYPE).totalParticipants(UPDATED_TOTAL_PARTICIPANTS);
+        partialUpdatedCompetition
+            .linkedPrompt(UPDATED_LINKED_PROMPT)
+            .competitionType(UPDATED_COMPETITION_TYPE)
+            .noOfParticipants(UPDATED_NO_OF_PARTICIPANTS);
 
         restCompetitionMockMvc
             .perform(
@@ -265,8 +285,9 @@ class CompetitionResourceIT {
         List<Competition> competitionList = competitionRepository.findAll();
         assertThat(competitionList).hasSize(databaseSizeBeforeUpdate);
         Competition testCompetition = competitionList.get(competitionList.size() - 1);
-        assertThat(testCompetition.getCompType()).isEqualTo(UPDATED_COMP_TYPE);
-        assertThat(testCompetition.getTotalParticipants()).isEqualTo(UPDATED_TOTAL_PARTICIPANTS);
+        assertThat(testCompetition.getLinkedPrompt()).isEqualTo(UPDATED_LINKED_PROMPT);
+        assertThat(testCompetition.getCompetitionType()).isEqualTo(UPDATED_COMPETITION_TYPE);
+        assertThat(testCompetition.getNoOfParticipants()).isEqualTo(UPDATED_NO_OF_PARTICIPANTS);
     }
 
     @Test
@@ -281,7 +302,10 @@ class CompetitionResourceIT {
         Competition partialUpdatedCompetition = new Competition();
         partialUpdatedCompetition.setId(competition.getId());
 
-        partialUpdatedCompetition.compType(UPDATED_COMP_TYPE).totalParticipants(UPDATED_TOTAL_PARTICIPANTS);
+        partialUpdatedCompetition
+            .linkedPrompt(UPDATED_LINKED_PROMPT)
+            .competitionType(UPDATED_COMPETITION_TYPE)
+            .noOfParticipants(UPDATED_NO_OF_PARTICIPANTS);
 
         restCompetitionMockMvc
             .perform(
@@ -295,8 +319,9 @@ class CompetitionResourceIT {
         List<Competition> competitionList = competitionRepository.findAll();
         assertThat(competitionList).hasSize(databaseSizeBeforeUpdate);
         Competition testCompetition = competitionList.get(competitionList.size() - 1);
-        assertThat(testCompetition.getCompType()).isEqualTo(UPDATED_COMP_TYPE);
-        assertThat(testCompetition.getTotalParticipants()).isEqualTo(UPDATED_TOTAL_PARTICIPANTS);
+        assertThat(testCompetition.getLinkedPrompt()).isEqualTo(UPDATED_LINKED_PROMPT);
+        assertThat(testCompetition.getCompetitionType()).isEqualTo(UPDATED_COMPETITION_TYPE);
+        assertThat(testCompetition.getNoOfParticipants()).isEqualTo(UPDATED_NO_OF_PARTICIPANTS);
     }
 
     @Test

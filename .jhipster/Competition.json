@@ -6,12 +6,17 @@
   "entityTableName": "competition",
   "fields": [
     {
-      "fieldName": "compType",
-      "fieldType": "Boolean"
+      "fieldName": "linkedPrompt",
+      "fieldType": "Long"
     },
     {
-      "fieldName": "totalParticipants",
-      "fieldType": "Integer"
+      "fieldName": "competitionType",
+      "fieldType": "CompetitionType",
+      "fieldValues": "Daily,Weekly"
+    },
+    {
+      "fieldName": "noOfParticipants",
+      "fieldType": "Long"
     }
   ],
   "fluentMethods": true,
@@ -21,9 +26,10 @@
   "readOnly": false,
   "relationships": [
     {
-      "otherEntityName": "prompt",
+      "otherEntityName": "competitionPrompt",
+      "otherEntityRelationshipName": "competition",
       "ownerSide": true,
-      "relationshipName": "prompt",
+      "relationshipName": "competitionPrompt",
       "relationshipType": "one-to-one"
     }
   ],

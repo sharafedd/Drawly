@@ -1,3 +1,5 @@
+import dayjs from 'dayjs/esm';
+
 import { IPost, NewPost } from './post.model';
 
 export const sampleWithRequiredData: IPost = {
@@ -6,17 +8,17 @@ export const sampleWithRequiredData: IPost = {
 
 export const sampleWithPartialData: IPost = {
   id: 93202,
-  avergaeStar: 798,
+  submissionDate: dayjs('2024-02-21T12:37'),
 };
 
 export const sampleWithFullData: IPost = {
   id: 54350,
-  postID: 79841,
-  linkedPrompt: 60570,
-  linkedUser: 92413,
+  linkedPrompt: 79841,
+  linkedUser: 60570,
   postContent: '../fake-data/blob/hipster.png',
   postContentContentType: 'unknown',
-  avergaeStar: 23240,
+  averageStar: 92413,
+  submissionDate: dayjs('2024-02-21T07:13'),
 };
 
 export const sampleWithNewData: NewPost = {

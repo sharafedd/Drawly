@@ -14,14 +14,17 @@
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="comp_type" type="boolean">
+            <column name="linked_prompt" type="bigint">
                 <constraints nullable="true" />
             </column>
-            <column name="total_participants" type="integer">
+            <column name="competition_type" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="prompt_id" type="bigint">
-                <constraints nullable="true" unique="true" uniqueConstraintName="ux_competition__prompt_id" />
+            <column name="no_of_participants" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="competition_prompt_id" type="bigint">
+                <constraints nullable="true" unique="true" uniqueConstraintName="ux_competition__competition_prompt_id" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
@@ -44,8 +47,9 @@
                   tableName="competition"
                   usePreparedStatements="true">
             <column name="id" type="numeric"/>
-            <column name="comp_type" type="boolean"/>
-            <column name="total_participants" type="numeric"/>
+            <column name="linked_prompt" type="numeric"/>
+            <column name="competition_type" type="string"/>
+            <column name="no_of_participants" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

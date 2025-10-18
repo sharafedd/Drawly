@@ -1,0 +1,56 @@
+{
+  "applications": "*",
+  "changelogDate": "20240305074442",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "room",
+  "fields": [
+    {
+      "fieldName": "noOfRounds",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "noOfPlayers",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "roomType",
+      "fieldType": "RoomType",
+      "fieldValues": "Public,Private"
+    },
+    {
+      "fieldName": "roomCode",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "theme",
+      "fieldType": "String"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Room",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "player",
+      "otherEntityRelationshipName": "room",
+      "relationshipName": "player",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "round",
+      "otherEntityRelationshipName": "room",
+      "relationshipName": "round",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "roundPrompt",
+      "otherEntityRelationshipName": "room",
+      "relationshipName": "roundPrompt",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "no"
+}

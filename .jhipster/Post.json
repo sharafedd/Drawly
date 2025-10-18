@@ -6,16 +6,12 @@
   "entityTableName": "post",
   "fields": [
     {
-      "fieldName": "postID",
-      "fieldType": "Integer"
-    },
-    {
       "fieldName": "linkedPrompt",
-      "fieldType": "Integer"
+      "fieldType": "Long"
     },
     {
       "fieldName": "linkedUser",
-      "fieldType": "Integer"
+      "fieldType": "Long"
     },
     {
       "fieldName": "postContent",
@@ -23,8 +19,12 @@
       "fieldTypeBlobContent": "image"
     },
     {
-      "fieldName": "avergaeStar",
+      "fieldName": "averageStar",
       "fieldType": "Float"
+    },
+    {
+      "fieldName": "submissionDate",
+      "fieldType": "Instant"
     }
   ],
   "fluentMethods": true,
@@ -34,14 +34,15 @@
   "readOnly": false,
   "relationships": [
     {
-      "otherEntityName": "prompt",
+      "otherEntityName": "competitionPrompt",
       "otherEntityRelationshipName": "post",
-      "relationshipName": "prompt",
+      "relationshipName": "competitionPrompt",
       "relationshipType": "one-to-many"
     },
     {
-      "otherEntityName": "user",
-      "relationshipName": "user",
+      "otherEntityName": "comment",
+      "otherEntityRelationshipName": "post",
+      "relationshipName": "comment",
       "relationshipType": "many-to-one"
     }
   ],

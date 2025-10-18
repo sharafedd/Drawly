@@ -1,33 +1,88 @@
-entity Post {
-    postID Integer
-    linkedPrompt Integer
-    linkedUser Integer
-    postContent ImageBlob
-    avergaeStar Float
-}
-
-entity Prompt {
-    promptID Integer
-    promptContent String
-    promptDeadline ZonedDateTime
-    participantsNum Integer
-}
-
 entity Competition {
-    compType Boolean
-    totalParticipants Integer
+    linkedPrompt Long
+    competitionType CompetitionType
+    noOfParticipants Long
 }
 
-
-
-relationship ManyToOne {
-    Post{user} to User
+entity CompetitionPrompt {
+    linkedCompetition Long
+    promptContent String
 }
 
-relationship OneToMany {
-    Post{prompt} to Prompt
+entity Post {
+    linkedPrompt Long
+    linkedUser Long
+    postContent ImageBlob
+    averageStar Float
+    submissionDate Instant
+}
+
+entity Comment {
+    linkedPost Long
+    linkedUser Long
+    content String
+    timestamp Instant
+}
+
+entity User {
+    linkedUser Long
+    profilePicture ImageBlob
+    totalStars Float
+}
+
+entity Room {
+    noOfRounds Integer
+    noOfPlayers Integer
+    roomType RoomType
+    roomCode Integer
+    theme String
+}
+
+entity Round {
+    linkedPrompt Long
+    linkedRoom Long
+    roundNumber Integer
+}
+
+entity RoundPrompt {
+    linkedRoom Long
+    linkedRound Long
+    content String
+}
+
+entity Player {
+    linkedUser Long unique
+    linkedRoom Long
+    username String
+    drawing ImageBlob
+    totalStars Integer
+    rank Integer
+}
+
+enum CompetitionType {
+    Daily,
+    Weekly
+}
+
+enum RoomType {
+    Public,
+    Private
 }
 
 relationship OneToOne {
-    Competition{prompt} to Prompt
+    Competition to CompetitionPrompt
+    Round to RoundPrompt
+}
+
+relationship OneToMany {
+    Post to CompetitionPrompt
+    Comment to Post
+    Player to Room
+    Round to Room
+    RoundPrompt to Room
+}
+
+relationship ManyToOne {
+    User{posts} to Post
+    User{comments} to Comment
 }

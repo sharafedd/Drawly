@@ -37,7 +37,7 @@ public class Prompt implements Serializable {
     private Integer participantsNum;
 
     @ManyToOne
-    @JsonIgnoreProperties(value = { "prompts", "user" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "competitionPrompts", "comment" }, allowSetters = true)
     private Post post;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

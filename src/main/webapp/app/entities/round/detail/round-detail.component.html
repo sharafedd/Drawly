@@ -1,0 +1,46 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="round">
+      <h2 data-cy="roundDetailsHeading"><span>Round</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ round.id }}</span>
+        </dd>
+        <dt><span>Linked Prompt</span></dt>
+        <dd>
+          <span>{{ round.linkedPrompt }}</span>
+        </dd>
+        <dt><span>Linked Room</span></dt>
+        <dd>
+          <span>{{ round.linkedRoom }}</span>
+        </dd>
+        <dt><span>Round Number</span></dt>
+        <dd>
+          <span>{{ round.roundNumber }}</span>
+        </dd>
+        <dt><span>Round Prompt</span></dt>
+        <dd>
+          <div *ngIf="round.roundPrompt">
+            <a [routerLink]="['/round-prompt', round.roundPrompt.id, 'view']">{{ round.roundPrompt.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/round', round.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

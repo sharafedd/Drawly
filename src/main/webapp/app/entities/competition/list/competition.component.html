@@ -38,21 +38,27 @@
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
-          <th scope="col" jhiSortBy="compType">
+          <th scope="col" jhiSortBy="linkedPrompt">
             <div class="d-flex">
-              <span>Comp Type</span>
+              <span>Linked Prompt</span>
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
-          <th scope="col" jhiSortBy="totalParticipants">
+          <th scope="col" jhiSortBy="competitionType">
             <div class="d-flex">
-              <span>Total Participants</span>
+              <span>Competition Type</span>
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
-          <th scope="col" jhiSortBy="prompt.id">
+          <th scope="col" jhiSortBy="noOfParticipants">
             <div class="d-flex">
-              <span>Prompt</span>
+              <span>No Of Participants</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="competitionPrompt.id">
+            <div class="d-flex">
+              <span>Competition Prompt</span>
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
@@ -64,11 +70,12 @@
           <td>
             <a [routerLink]="['/competition', competition.id, 'view']">{{ competition.id }}</a>
           </td>
-          <td>{{ competition.compType }}</td>
-          <td>{{ competition.totalParticipants }}</td>
+          <td>{{ competition.linkedPrompt }}</td>
+          <td>{{ competition.competitionType }}</td>
+          <td>{{ competition.noOfParticipants }}</td>
           <td>
-            <div *ngIf="competition.prompt">
-              <a [routerLink]="['/prompt', competition.prompt.id, 'view']">{{ competition.prompt.id }}</a>
+            <div *ngIf="competition.competitionPrompt">
+              <a [routerLink]="['/competition-prompt', competition.competitionPrompt.id, 'view']">{{ competition.competitionPrompt.id }}</a>
             </div>
           </td>
           <td class="text-end">

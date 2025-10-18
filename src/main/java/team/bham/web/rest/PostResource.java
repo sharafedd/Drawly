@@ -119,9 +119,6 @@ public class PostResource {
         Optional<Post> result = postRepository
             .findById(post.getId())
             .map(existingPost -> {
-                if (post.getPostID() != null) {
-                    existingPost.setPostID(post.getPostID());
-                }
                 if (post.getLinkedPrompt() != null) {
                     existingPost.setLinkedPrompt(post.getLinkedPrompt());
                 }
@@ -134,8 +131,11 @@ public class PostResource {
                 if (post.getPostContentContentType() != null) {
                     existingPost.setPostContentContentType(post.getPostContentContentType());
                 }
-                if (post.getAvergaeStar() != null) {
-                    existingPost.setAvergaeStar(post.getAvergaeStar());
+                if (post.getAverageStar() != null) {
+                    existingPost.setAverageStar(post.getAverageStar());
+                }
+                if (post.getSubmissionDate() != null) {
+                    existingPost.setSubmissionDate(post.getSubmissionDate());
                 }
 
                 return existingPost;

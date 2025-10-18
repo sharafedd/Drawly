@@ -14,18 +14,22 @@
         <dd>
           <span>{{ competition.id }}</span>
         </dd>
-        <dt><span>Comp Type</span></dt>
+        <dt><span>Linked Prompt</span></dt>
         <dd>
-          <span>{{ competition.compType }}</span>
+          <span>{{ competition.linkedPrompt }}</span>
         </dd>
-        <dt><span>Total Participants</span></dt>
+        <dt><span>Competition Type</span></dt>
         <dd>
-          <span>{{ competition.totalParticipants }}</span>
+          <span>{{ competition.competitionType }}</span>
         </dd>
-        <dt><span>Prompt</span></dt>
+        <dt><span>No Of Participants</span></dt>
         <dd>
-          <div *ngIf="competition.prompt">
-            <a [routerLink]="['/prompt', competition.prompt.id, 'view']">{{ competition.prompt.id }}</a>
+          <span>{{ competition.noOfParticipants }}</span>
+        </dd>
+        <dt><span>Competition Prompt</span></dt>
+        <dd>
+          <div *ngIf="competition.competitionPrompt">
+            <a [routerLink]="['/competition-prompt', competition.competitionPrompt.id, 'view']">{{ competition.competitionPrompt.id }}</a>
           </div>
         </dd>
       </dl>

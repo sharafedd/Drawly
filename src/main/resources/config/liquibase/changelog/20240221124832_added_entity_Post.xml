@@ -14,13 +14,10 @@
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="post_id" type="integer">
+            <column name="linked_prompt" type="bigint">
                 <constraints nullable="true" />
             </column>
-            <column name="linked_prompt" type="integer">
-                <constraints nullable="true" />
-            </column>
-            <column name="linked_user" type="integer">
+            <column name="linked_user" type="bigint">
                 <constraints nullable="true" />
             </column>
             <column name="post_content" type="${blobType}">
@@ -29,14 +26,18 @@
             <column name="post_content_content_type" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="avergae_star" type="${floatType}">
+            <column name="average_star" type="${floatType}">
                 <constraints nullable="true" />
             </column>
-            <column name="user_id" type="bigint">
+            <column name="submission_date" type="${datetimeType}">
+                <constraints nullable="true" />
+            </column>
+            <column name="comment_id" type="bigint">
                 <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
+        <dropDefaultValue tableName="post" columnName="submission_date" columnDataType="${datetimeType}"/>
     </changeSet>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
@@ -56,12 +57,12 @@
                   tableName="post"
                   usePreparedStatements="true">
             <column name="id" type="numeric"/>
-            <column name="post_id" type="numeric"/>
             <column name="linked_prompt" type="numeric"/>
             <column name="linked_user" type="numeric"/>
             <column name="post_content" type="blob"/>
             <column name="post_content_content_type" type="string"/>
-            <column name="avergae_star" type="numeric"/>
+            <column name="average_star" type="numeric"/>
+            <column name="submission_date" type="date"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
     </changeSet>

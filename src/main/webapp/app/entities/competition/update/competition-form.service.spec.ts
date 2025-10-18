@@ -20,9 +20,10 @@ describe('Competition Form Service', () => {
         expect(formGroup.controls).toEqual(
           expect.objectContaining({
             id: expect.any(Object),
-            compType: expect.any(Object),
-            totalParticipants: expect.any(Object),
-            prompt: expect.any(Object),
+            linkedPrompt: expect.any(Object),
+            competitionType: expect.any(Object),
+            noOfParticipants: expect.any(Object),
+            competitionPrompt: expect.any(Object),
           })
         );
       });
@@ -33,9 +34,10 @@ describe('Competition Form Service', () => {
         expect(formGroup.controls).toEqual(
           expect.objectContaining({
             id: expect.any(Object),
-            compType: expect.any(Object),
-            totalParticipants: expect.any(Object),
-            prompt: expect.any(Object),
+            linkedPrompt: expect.any(Object),
+            competitionType: expect.any(Object),
+            noOfParticipants: expect.any(Object),
+            competitionPrompt: expect.any(Object),
           })
         );
       });

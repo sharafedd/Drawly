@@ -1,0 +1,38 @@
+{
+  "applications": "*",
+  "changelogDate": "20240305074440",
+  "dto": "no",
+  "embedded": false,
+  "entityTableName": "competition_prompt",
+  "fields": [
+    {
+      "fieldName": "linkedCompetition",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "promptContent",
+      "fieldType": "String"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "CompetitionPrompt",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "competition",
+      "otherEntityRelationshipName": "competitionPrompt",
+      "ownerSide": false,
+      "relationshipName": "competition",
+      "relationshipType": "one-to-one"
+    },
+    {
+      "otherEntityName": "post",
+      "otherEntityRelationshipName": "competitionPrompt",
+      "relationshipName": "post",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "no"
+}
